@@ -1,0 +1,15 @@
+{
+  "name": "rollup-plugin-notify",
+  "version": "0.0.2",
+  "description": "Displays rollup errors as system notifications.",
+  "main": "index.js",
+  "author": "Mike Kovarik",
+  "license": "MIT",
+  "peerDependencies": {
+    "rollup": "^0.60.0"
+  },
+  "dependencies": {
+    "node-notifier": "^5.2.1",
+    "strip-ansi": "^4.0.0"
+  }
+}

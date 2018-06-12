@@ -1,0 +1,8 @@
+# Ignore everything
+*
+.*
+
+# Except for
+!index.js
+!font.js
+!rollup.png
