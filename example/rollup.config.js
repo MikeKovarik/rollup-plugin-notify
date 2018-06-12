@@ -9,7 +9,7 @@ export default {
 		file: `transpiled.js`,
 		format: 'umd',
 		name: 'my-app',
-		external: {anchora: 'anchora'},
+		globals: {anchora: 'anchora'},
 	},
 	external: ['anchora'],
 	plugins: [

@@ -3,6 +3,9 @@
 Displays rollup errors as system notifications.
 
 
+![Example](https://raw.githubusercontent.com/MikeKovarik/rollup-plugin-notify/master/example.gif)
+
+
 ## Installation
 
 ```bash
@@ -35,6 +38,11 @@ Check out `./example` folder for demo app.
 We try to fit as much of useful information (file, code snippet, position) as possible in the little space of 4-line notification. But it is hard to test this module for all the plugins out there, each of which can and will throw different errors of various shapes.
 
 Basic Rollup's parse errors and Babel plugin work great out of the box. If you feel like `rollup-plugin-notify` could display better errors for your favorite Rollup plugin, let us know, or better yet, hit us up with a PR.
+
+
+## Contributing
+
+Contributions, help and feedback is welcome. Underlying [node-notifier](https://www.npmjs.com/package/node-notifier) module is troublesome and difficult to test across platforms so testing and troubleshooting on other systems would be appreciated.
 
 
 ## License
