@@ -17,6 +17,8 @@ npm install --save-dev rollup-plugin-notify
 
 Pretty simple, no settings, no options, just import the `notify()` function and add it to your rollup config file. Then you can start rollup in an endless watch mode `rollup -c -w` and minimize the terminal because all incoming errors will be caught and shown as notifications!
 
+**Rollup v0.60.0 or higher is required**
+
 
 ```js
 // rollup.config.js

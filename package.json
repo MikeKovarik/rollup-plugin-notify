@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-notify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Displays rollup errors as system notifications.",
   "keywords": [
     "rollup",

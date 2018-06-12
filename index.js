@@ -2,7 +2,14 @@ const path = require('path')
 const notifier = require('node-notifier')
 const stripAnsi = require('strip-ansi')
 const {charSizes} = require('./font.js')
+const rollup = require('rollup')
 
+
+if (rollup.VERSION) {
+	let [major, minor, patch] = rollup.VERSION.split('.').map(Number)
+	if (minor < 60)
+		console.warn(`'rollup-plugin-notify' will not work. Rollup 0.60.0 or higher is required`)
+}
 
 // Ugly hack. There are two problems (not 100% sure but this is what's most likely going on)
 // 1) Rollup apparently terminates the process immediately after error occurs.
