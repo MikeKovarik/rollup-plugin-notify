@@ -1,7 +1,14 @@
 {
   "name": "rollup-plugin-notify",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Displays rollup errors as system notifications.",
+  "author": "Mike Kovarik",
+  "license": "MIT",
+  "bugs": "https://github.com/MikeKovarik/rollup-plugin-notify/issues/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MikeKovarik/rollup-plugin-notify.git"
+  },
   "keywords": [
     "rollup",
     "plugin",
@@ -9,9 +16,6 @@
     "notify",
     "notification"
   ],
-  "main": "index.js",
-  "author": "Mike Kovarik",
-  "license": "MIT",
   "peerDependencies": {
     "rollup": "^0.60.0"
   },
