@@ -5,6 +5,7 @@ const {charSizes} = require('./font.js')
 const rollup = require('rollup')
 
 
+// Warning that this plugin requies at least rollup 0.60.0.
 if (rollup.VERSION) {
 	let [major, minor, patch] = rollup.VERSION.split('.').map(Number)
 	if (minor < 60)
@@ -40,11 +41,9 @@ if (os.platform() === 'win32' && os.release().startsWith('10.')) {
 
 var icon = path.join(__dirname, 'rollup.png')
 
-function makeDummyLine(char, size) {
-	return char.repeat(Math.round(52 / size))
-}
-
-function getLength(string) {
+// Calculates how many space characters should be displayed in place of given string argument.
+// We sum widths of each character in the string because the text cannot be displayed in monospace font.
+function calculateCountOfReplacementChar(string, replaceByChar = ' ') {
 	var characters = 0
 	string
 		.split('')
@@ -52,6 +51,9 @@ function getLength(string) {
 			var size = charSizes.get(char) || 1
 			characters += size
 		})
+	// All sizes were measured against space char. Recalculate if needed.
+	if (replaceByChar !== ' ')
+		characters = characters / charSizes.get(replaceByChar)
 	return Math.round(characters)
 }
 
@@ -62,7 +64,7 @@ function sanitizeLines(frame) {
 		.replace(/\r/g, '')
 		.split('\n')
 		.map(l => l.replace(/\t/g, '  '))
-	// Remove left carret.
+	// Remove left caret.
 	var leftCaretLine = lines.find(l => l.startsWith('>'))
 	if (leftCaretLine) {
 		lines[lines.indexOf(leftCaretLine)] = leftCaretLine.replace('>', ' ')
@@ -75,7 +77,8 @@ function sanitizeLines(frame) {
 	return lines
 }
 
-function getMessage(error) {
+// Extract only the error message and strip it from file path that might be in there as well.
+function extractMessage(error) {
 	var {message} = error
 	if (error.plugin === 'babel') {
 		// Hey Babel, you're not helping!
@@ -108,28 +111,34 @@ function getCaretLine(lines) {
 		})
 }
 
+// Accepts code snipptet from the error message, sanitizes the lines by removing unnecessary paddings and characters,
+// then finds the line of code with a problem and the line below with a caret sign ^ that undelines the error.
+// It then recalculates how many spaces and carres should be displayed (with non-monospace font) in the caret line
+// and returns both code line & caret line.
 function createCodeBlock(frame) {
 	var lines = sanitizeLines(frame)
 	var caretLineOriginal = getCaretLine(lines)
 	var codeLine = lines[lines.indexOf(caretLineOriginal) - 1]
 	var caretStart = caretLineOriginal.indexOf('^')
-	var caretCountOriginal = (caretLineOriginal.match(/\^/g) || []).length
+	// Calculate how many spaces should be displayed under the "no problem here" part of the code line.
 	var toBeReplacedBySpaces = codeLine.substr(0, caretStart)
-	var spaceCount = getLength(toBeReplacedBySpaces)
+	var spaceCount = calculateCountOfReplacementChar(toBeReplacedBySpaces, ' ')
 	var spaces = ' '.repeat(spaceCount)
+	// Calculate how many carets should be displayed under the error-causing part of the code line.
+	var caretCountOriginal = (caretLineOriginal.match(/\^/g) || []).length
 	if (caretCountOriginal === 1) {
 		var carets = '^'
 	} else {
 		var toBeReplacedByMarkers = codeLine.substr(caretStart, caretCountOriginal)
-		var caretCountNew = getLength(toBeReplacedByMarkers)
-		var carets = '^'.repeat(caretCountNew / charSizes.get('^'))
+		var caretCountNew = calculateCountOfReplacementChar(toBeReplacedByMarkers, '^')
+		var carets = '^'.repeat(caretCountNew)
 	}
 	var caretLine = spaces + carets
 	return [codeLine, caretLine].join('\n')
 }
 
 function processError(error) {
-	var message = getMessage(error)
+	var message = extractMessage(error)
 	if (error.plugin === undefined && error.frame) {
 		message += '\n' + createCodeBlock(error.frame)
 	} else if (error.codeFrame) {
@@ -178,6 +187,7 @@ function getFileName(filepath) {
 
 module.exports = function notify(options) {
 	return {
+		name: 'notify',
 		buildEnd(err) {
 			if (err)
 				processError(err)
