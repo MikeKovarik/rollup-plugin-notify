@@ -103,12 +103,18 @@ function extractMessage(error) {
 
 // TODO. Works great with basic rollup error and seems to work ok with babel, but could use more logic.
 function getCaretLine(lines) {
-	return lines
-		.find(line => {
-			return line.startsWith('  ')
-				&& line.includes('^')
-				&& !line.includes(':')
-		})
+	return lines.find(isCarretLine)
+}
+
+function isCarretLine(line) {
+	return line.startsWith('  ')
+		&& line.includes('^')
+		&& !line.includes(':')
+}
+
+function getFileName(filepath) {
+	if (typeof filepath === 'string')
+		return path.parse(filepath).base
 }
 
 // Accepts code snipptet from the error message, sanitizes the lines by removing unnecessary paddings and characters,
@@ -137,7 +143,7 @@ function createCodeBlock(frame) {
 	return [codeLine, caretLine].join('\n')
 }
 
-function processError(error) {
+function notifyError(error) {
 	var message = extractMessage(error)
 	if (error.plugin === undefined && error.frame) {
 		message += '\n' + createCodeBlock(error.frame)
@@ -180,9 +186,10 @@ function processError(error) {
 	notifier.notify({title, message, icon})
 }
 
-function getFileName(filepath) {
-	if (typeof filepath === 'string')
-		return path.parse(filepath).base
+function notifySuccess() {
+	var title = 'Success'
+	var message = 'Compiled without problems'
+	notifier.notify({title, message, icon})
 }
 
 module.exports = function notify(options) {
@@ -190,7 +197,9 @@ module.exports = function notify(options) {
 		name: 'notify',
 		buildEnd(err) {
 			if (err)
-				processError(err)
+				notifyError(err)
+			else if (options.success = true)
+				notifySuccess()
 		}
 	}
 }
