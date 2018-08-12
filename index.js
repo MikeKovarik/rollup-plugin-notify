@@ -39,7 +39,8 @@ if (os.platform() === 'win32' && os.release().startsWith('10.')) {
 	}
 }
 
-var icon = path.join(__dirname, 'rollup.png')
+var iconError = path.join(__dirname, 'rollup-error.png')
+var iconSuccess = path.join(__dirname, 'rollup-success.png')
 
 // Calculates how many space characters should be displayed in place of given string argument.
 // We sum widths of each character in the string because the text cannot be displayed in monospace font.
@@ -182,14 +183,15 @@ function notifyError(error) {
 	else if (error.code)
 		sections.push(error.code)
 	var title = sections.filter(a => a).join(' ') || `Rollup error: ${error.code}`
+	title = '❌ ' + title;
 	// Show notification
-	notifier.notify({title, message, icon})
+	notifier.notify({title, message, icon: iconError})
 }
 
 function notifySuccess() {
-	var title = 'Success'
+	var title = '✅ Build successful'
 	var message = 'Compiled without problems'
-	notifier.notify({title, message, icon})
+	notifier.notify({title, message, icon: iconSuccess})
 }
 
 module.exports = function notify(options) {
@@ -198,7 +200,7 @@ module.exports = function notify(options) {
 		buildEnd(err) {
 			if (err)
 				notifyError(err)
-			else if (options.success = true)
+			else if (options && options.success == true)
 				notifySuccess()
 		}
 	}
