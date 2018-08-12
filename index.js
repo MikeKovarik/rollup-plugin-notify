@@ -194,13 +194,13 @@ function notifySuccess() {
 	notifier.notify({title, message, icon: iconSuccess})
 }
 
-module.exports = function notify(options) {
+module.exports = function notify(options = {}) {
 	return {
 		name: 'notify',
 		buildEnd(err) {
 			if (err)
 				notifyError(err)
-			else if (options && options.success == true)
+			else if (options && options.success === true)
 				notifySuccess()
 		}
 	}
