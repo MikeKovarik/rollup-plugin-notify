@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-notify",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "📟 Displays rollup errors as system notifications.",
   "author": "Mike Kovarik",
   "license": "MIT",
