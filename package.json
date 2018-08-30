@@ -1,7 +1,7 @@
 {
   "name": "rollup-plugin-notify",
-  "version": "1.0.4",
-  "description": "Displays rollup errors as system notifications.",
+  "version": "1.0.5",
+  "description": "📟 Displays rollup errors as system notifications.",
   "author": "Mike Kovarik",
   "license": "MIT",
   "bugs": "https://github.com/MikeKovarik/rollup-plugin-notify/issues/",
@@ -17,7 +17,7 @@
     "notification"
   ],
   "peerDependencies": {
-    "rollup": "^0.60.0"
+    "rollup": "^0.65.0"
   },
   "dependencies": {
     "node-notifier": "^5.2.1",

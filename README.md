@@ -1,6 +1,6 @@
 # rollup-plugin-notify
 
-Displays rollup errors as system notifications.
+📟 Displays rollup errors as system notifications.
 
 
 ![Example](https://raw.githubusercontent.com/MikeKovarik/rollup-plugin-notify/master/example.gif)
