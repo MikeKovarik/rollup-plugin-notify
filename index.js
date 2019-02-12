@@ -8,7 +8,7 @@ const rollup = require('rollup')
 // Warning that this plugin requies at least rollup 0.60.0.
 if (rollup.VERSION) {
 	let [major, minor, patch] = rollup.VERSION.split('.').map(Number)
-	if (minor < 60)
+	if (major < 1 && minor < 60)
 		console.warn(`'rollup-plugin-notify' will not work. Rollup 0.60.0 or higher is required`)
 }
 
