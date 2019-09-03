@@ -188,9 +188,9 @@ function notifyError(error) {
 	notifier.notify({title, message, icon: iconError})
 }
 
-function notifySuccess() {
+function notifySuccess(options) {
 	var title = '✅ Build successful'
-	var message = 'Compiled without problems'
+	var message = options.message ? options.message : 'Compiled without problems'
 	notifier.notify({title, message, icon: iconSuccess})
 }
 
@@ -201,7 +201,7 @@ module.exports = function notify(options = {}) {
 			if (err)
 				notifyError(err)
 			else if (options && options.success === true)
-				notifySuccess()
+				notifySuccess(options)
 		}
 	}
 }
