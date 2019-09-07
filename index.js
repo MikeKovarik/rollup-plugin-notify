@@ -144,7 +144,7 @@ function createCodeBlock(frame) {
 	return [codeLine, caretLine].join('\n')
 }
 
-function notifyError(error) {
+function notifyError(error, buildId) {
 	var message = extractMessage(error)
 	if (error.plugin === undefined && error.frame) {
 		message += '\n' + createCodeBlock(error.frame)
@@ -173,25 +173,28 @@ function notifyError(error) {
 		} catch(err) {}
 	}
 	// Make title from available information
-	var sections = []
+	var titleSections = ['❌', buildId]
 	if (filepath)
-		sections.push(getFileName(filepath))
+		titleSections.push(getFileName(filepath))
 	if (line !== undefined && column !== undefined)
-		sections.push(`(${line}:${column})`)
+		titleSections.push(`(${line}:${column})`)
 	if (error.plugin)
-		sections.push(error.plugin)
+		titleSections.push(error.plugin)
 	else if (error.code)
-		sections.push(error.code)
-	var title = sections.filter(a => a).join(' ') || `Rollup error: ${error.code}`
-	title = '❌ ' + title;
+		titleSections.push(error.code)
+	var title = createTitle(titleSections) || `Rollup error: ${error.code}`
 	// Show notification
 	notifier.notify({title, message, icon: iconError})
 }
 
 function notifySuccess(options) {
-	var title = '✅ Build successful'
+	var title = createTitle(['✅ Build', buildId, 'successful'])
 	var message = options.message ? options.message : 'Compiled without problems'
 	notifier.notify({title, message, icon: iconSuccess})
+}
+
+function createTitle(sections) {
+	return sections.filter(a => a).join(' ')
 }
 
 module.exports = function notify(options = {}) {
@@ -199,7 +202,7 @@ module.exports = function notify(options = {}) {
 		name: 'notify',
 		buildEnd(err) {
 			if (err)
-				notifyError(err)
+				notifyError(err, options.id)
 			else if (options && options.success === true)
 				notifySuccess(options)
 		}
