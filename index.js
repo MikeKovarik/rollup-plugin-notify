@@ -202,7 +202,7 @@ module.exports = function notify(options = {}) {
 		name: 'notify',
 		buildEnd(err) {
 			if (err)
-				notifyError(err)
+				notifyError(err, options.id)
 			else if (options && options.success === true)
 				notifySuccess(options.id)
 		}
