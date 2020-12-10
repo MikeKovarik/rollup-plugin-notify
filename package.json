@@ -17,7 +17,7 @@
     "notification"
   ],
   "peerDependencies": {
-    "rollup": "^1.4.1"
+    "rollup": "^1.4.1||^2.0.0"
   },
   "dependencies": {
     "node-notifier": "^5.2.1",
